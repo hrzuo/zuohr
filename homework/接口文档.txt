@@ -1,0 +1,5 @@
+后台环境：node
+依赖包：express，mongodb
+添加接口：/addPost
+删除接口：/delPost
+渲染接口：/loadPost

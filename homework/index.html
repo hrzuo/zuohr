@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.box {
+				display: flex;
+				border: 1px solid red;
+				justify-content: space-around;
+				flex-wrap: wrap;
+			}
+			
+			.content0 {
+				border: 1px solid black;
+				flex-basis: 22%;
+			}
+			.content1 {
+				border: 1px solid black;
+				flex-basis: 22%;
+				background: purple;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div>
+			<input type="text" name="" id="thinks" placeholder="请输入心愿" /><br>
+			<button id="add">提交</button>
+			<span id="prompt"></span>
+		</div>
+		<div class="box">
+			<!--<div class="content">
+				<a href="">删除</a>
+				<p>内容</p>
+				<button>√</button>
+			</div>
+			<div class="content">
+				<a href="">删除</a>
+				<p>内容</p>
+				<button>√</button>
+			</div>
+			<div class="content">
+				<a href="">删除</a>
+				<p>内容</p>
+				<button>√</button>
+			</div>
+			<div class="content">
+				<a href="">删除</a>
+				<p>内容</p>
+				<button>√</button>
+			</div>
+			<div class="content">
+				<a href="">删除</a>
+				<p>内容</p>
+				<button>√</button>
+			</div>
+			<div class="content">
+				<a href="">删除</a>
+				<p>内容</p>
+				<button>√</button>
+			</div>
+			<div class="content">
+				<a href="">删除</a>
+				<p>内容</p>
+				<button>√</button>
+			</div>
+			<div class="content">
+				<a href="">删除</a>
+				<p>内容</p>
+				<button>√</button>
+			</div>-->
+		</div>
+	</body>
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript">
+		$("#add").click(function() {
+			let time = new Date().getTime() + "";
+			let obj = {
+				yw: $("#thinks").val(),
+				zt: 0,
+				time: time
+			}
+			$.post("/addPost", obj, (data) => {
+				if(data) {
+					$("#prompt").html("添加成功");
+					console.log(data);
+					loadpage() 
+				} else {
+					$("#prompt").html("添加失败");
+				}
+			})
+		})
+		loadpage() 
+		function loadpage() {
+			$.post("/loadPost", (data) => {
+			    console.log(data.length)
+				var str = ""
+				var arr = [];
+				do{	var j =Math.floor(Math.random()*data.length);
+					if(arr.indexOf(data[j].yw)==-1){
+						str += `
+							<div class="content${data[j].zt}">
+							<button onclick= del(${JSON.stringify(data[j]._id)})>删除</button>
+							<p>${data[j].yw}</p>
+							<button onclick= bs(${JSON.stringify(data[j]._id)},${JSON.stringify(data[j].zt)})>√</button>
+							</div>
+						`
+						arr.push(data[j].yw)
+				    }
+				}while (arr.length<8);
+				$(".box").html(str);
+			})
+		}
+		//删除
+		function del(ids) {
+   			$.post("/delPost", {_id: ids}, function (res) {
+        	loadpage() 
+        	$("#prompt").html("删除成功")
+   			})
+		}
+		//标色
+		function bs(ids,zts){
+			if(zts="0"){
+				console.log(1)
+				$(this).html("classcontent1")
+			}else{
+				console.log(2)
+			}
+		}
+	</script>
+
+</html>
